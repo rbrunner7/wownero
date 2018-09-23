@@ -1848,7 +1848,7 @@ void simple_wallet::mms_transfer(const std::vector<std::string> &args)
   std::vector<std::string> transfer_args = args;
   transfer_args.erase(transfer_args.begin());
   m_called_by_mms = true;
-  transfer(transfer_args);
+  transfer_new(transfer_args);
 }
 
 void simple_wallet::mms_delete(const std::vector<std::string> &args)
@@ -2009,7 +2009,7 @@ void simple_wallet::mms_debug(const std::vector<std::string> &args)
   crypto::generate_key_derivation(m_spend_public_key, onetime_secret_key, derivation);
   
   crypto::chacha_key chacha_key;
-  crypto::generate_chacha_key(&derivation, sizeof(derivation), chacha_key, 1);
+  crypto::generate_chacha_key(&derivation, sizeof(derivation), chacha_key);
   crypto::chacha_iv iv = crypto::rand<crypto::chacha_iv>();
   std::string ciphertext;
   ciphertext.resize(plaintext.size());
@@ -2018,7 +2018,7 @@ void simple_wallet::mms_debug(const std::vector<std::string> &args)
   crypto::key_derivation derivation2;
   crypto::generate_key_derivation(onetime_public_key, m_spend_secret_key, derivation2);
   crypto::chacha_key chacha_key2;
-  crypto::generate_chacha_key(&derivation2, sizeof(derivation2), chacha_key2, 1);
+  crypto::generate_chacha_key(&derivation2, sizeof(derivation2), chacha_key2);
   std::string plaintext2;
   plaintext2.resize(ciphertext.size());
   crypto::chacha20(ciphertext.data(), ciphertext.size(), chacha_key2, iv, &plaintext2[0]);
